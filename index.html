@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title> Touch Paint </title>
+</head>
+
+<body align="center">
+    <h1> Touch Paint </h1>
+    <canvas id="MyCanvas" width="800" height="600"></canvas>
+    <br><br>
+    <span> Color </span>
+    <input id="Color" type="text">
+    <span> Line Width </span>
+    <input id="LineWidth" type="text">
+    <style>
+        h1 {
+            color: red;
+        }
+
+        body {
+            background-image: url("Background.jpg");
+            background-position: center;
+            background-size: cover;
+        }
+
+        #MyCanvas {
+            border-width: 10px;
+            background-color: white;
+            border-style: ridge;
+        }
+    </style>
+    <script>
+        TheMouseEvent = "Empty"
+        Canvas = document.getElementById("MyCanvas");
+        Ctx = Canvas.getContext("2d");
+        Color;
+        LineWidth;
+        var LastMouseX;
+        var LastMouseY;
+        var LastTouchX;
+        var LastTouchY;
+
+        Canvas.addEventListener("mousedown", MyMouseDown);
+
+        function MyMouseDown(e) {
+            Color = document.getElementById("Color").value;
+            LineWidth = document.getElementById("LineWidth").value;
+            TheMouseEvent = "MouseDown";
+        }
+
+        Canvas.addEventListener("mouseup", MyMouseUp);
+
+        function MyMouseUp(e) {
+            TheMouseEvent = "MouseUp";
+        }
+
+        Canvas.addEventListener("mouseleave", MyMouseLeave);
+
+        function MyMouseLeave(e) {
+            TheMouseEvent = "MouseLeave";
+        }
+
+        Canvas.addEventListener("mousemove", MyMouseMove);
+
+        function MyMouseMove(e) {
+            CurrentMouseX = e.clientX - Canvas.offsetLeft;
+            CurrentMouseY = e.clientY - Canvas.offsetTop;
+
+            if (TheMouseEvent = "MouseDown") {
+                Ctx.beginPath();
+                Ctx.strokeStyle = Color;
+                Ctx.lineWidth = LineWidth;
+                Ctx.moveTo(LastMouseX, LastMouseY);
+                Ctx.lineTo(CurrentMouseX, CurrentMouseY);
+                Ctx.stroke();
+            }
+
+            LastMouseX = CurrentMouseX;
+            LastMouseY = CurrentMouseY;
+        }
+
+        Canvas.addEventListener("touchstart", MyTouchStart);
+
+        function MyTouchStart(e) {
+            LastTouchX = e.touches[0].clientX - offsetLeft;
+            LastTouchY = e.touches[0].clientY - offsetTop;
+        }
+
+        Canvas.addEventListener("touchmove", MyTouchMove);
+
+        function MyTouchMove(e) {
+            CurrentTouchX = e.touches[0].clientX - Canvas.offsetLeft;
+            CurrentTouchY = e.touches[0].clientY - Canvas.offsetTop;
+
+            Ctx.beginPath();
+            Ctx.strokeStyle = Color;
+            Ctx.lineWidth = LineWidth;
+            Ctx.moveTo(LastTouchX, LastTouchY);
+            Ctx.lineTo(CurrentTouchX, CurrentTouchY);
+            Ctx.stroke();
+
+            LastTouchX = CurrentTouchX;
+            LastTouchY = CurrentTouchY;
+        }
+    </script>
+</body>
+
+</html>
